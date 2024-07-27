@@ -1,17 +1,38 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Camera
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+<ion-content >
+  <ion-grid style="height: 100%" *ngIf="showOriginalImage">
+    <ion-row style="height: 100%;">
+      <ion-col size="12" *ngFor="let photo of photoService.photos; index as position">
+        <ion-img [src]="photo.webviewPath" class="ion-justify-content-start" id="image" #imageCap></ion-img>
+        <ion-button expand="block" (click)="showImage()" *ngIf="showAnnotation">Annotate Image</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-toolbar *ngIf="!showOriginalImage">
+    <ion-button (click)="drawRectangle()" slot="start">Rectangle</ion-button>
+    <ion-button (click)="drawPolyline()" style="margin-left: 60px;">Polyline</ion-button>
+    <ion-button (click)="drawPolygon()" slot="end">Polygon</ion-button>
+  </ion-toolbar>
+  <canvas id="imageCanvas" #canvas style="width: 800; height: 307;"></canvas>
+  <ion-toolbar *ngIf="!showOriginalImage">
+    <ion-buttons slot="start">
+      <ion-button><a (click)="downloadImage()" id="canvasDownload" href="#" download>Download Image</a></ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button><a (click)="downloadCoordinate()" id="coordinateDownload" href="#" download> Download
+          Coordinate</a></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="savePhotoToGallery()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
